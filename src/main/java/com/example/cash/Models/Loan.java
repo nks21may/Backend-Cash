@@ -1,40 +1,44 @@
 package com.example.cash.Models;
 
+import java.math.BigDecimal;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class Loan {
-    
-    private @Id @GeneratedValue Long id;
-    private Integer amount;
-    @ManyToOne(optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
+    private @Id @GeneratedValue Integer id;
+    @Column(nullable = false)
+    private BigDecimal total;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User user;
-    
 
-    public Loan() {}
+    public Loan() {
+    }
 
-    public Loan(int amount, User user) {
-        this.amount = amount;
+    public Loan(BigDecimal total, User user) {
+        this.total = total;
         this.user = user;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public int getAmount() {
-        return amount;
+    public BigDecimal getTotal() {
+        return total;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     public User getUser() {
@@ -47,10 +51,10 @@ public class Loan {
 
     @Override
     public String toString() {
-        return "Loan{" +
-                "id=" + id +
-                ", amount=" + amount +
-                ", user=" + user +
+        return "{" + 
+                    "\"id\":" + id + 
+                    ", \"total\":" + total + 
+                    ", \"userId\":" + user.getId() + 
                 '}';
     }
 }
