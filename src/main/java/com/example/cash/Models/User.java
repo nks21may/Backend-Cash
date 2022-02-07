@@ -2,15 +2,15 @@ package com.example.cash.Models;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonRawValue;
 
 @Entity
 public class User {
@@ -21,6 +21,7 @@ public class User {
 	private String firstname;
 	private String lastname;
 
+	@JsonRawValue
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Loan> loans;
 
@@ -88,17 +89,6 @@ public class User {
 
 	@Override
 	public String toString() {
-		String loans = "";
-		if (this.loans != null) {
-			loans = this.loans.stream().map(Object::toString).collect(Collectors.joining(", "));
-		}
-		return "{" + 
-                    "\"id\": " + id + "," +
-                    "\"email\":\" " + email + "\"," +
-                    "\"firstname\":\" " + firstname + "\","	+
-                    "\"lastname\":\" " + lastname + "\"" + ", " +
-                    "\"loans\": [" + loans + "]" +
-                '}';
-
+		return id.toString();
 	}
 }

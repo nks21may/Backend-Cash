@@ -20,7 +20,7 @@ import com.example.cash.Repository.LoanRepository;
 import com.example.cash.Repository.UserRepository;
 
 @RestController
-public class UserREST {
+public class UserController {
 
     @Autowired
     UserRepository userRepository;
@@ -28,10 +28,10 @@ public class UserREST {
     LoanRepository loanRepository;
 
     @GetMapping(value = "/users/{id}", produces = "application/json")
-    public ResponseEntity<String> getById(
+    public User getById(
             @PathVariable("id") Integer id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        return new ResponseEntity<String>(user.toString(), HttpStatus.OK);
+        return user; //new ResponseEntity<String>(user.toString(), HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
