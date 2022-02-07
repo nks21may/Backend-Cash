@@ -2,7 +2,9 @@ package com.example.cash.Controllers;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.example.cash.Exceptions.UserNotFoundException;
 import com.example.cash.Models.Loan;
@@ -13,7 +15,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -29,8 +34,8 @@ public class LoanController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/loans")
-    public ObjectNode getAll(
+    @GetMapping(value = "/loans", produces = "application/json")
+    public String getAll(
             @RequestParam(required = false) Integer userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
@@ -42,16 +47,20 @@ public class LoanController {
         } else {
             pageLoan = loanRepository.findAll(paging);
         }
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode response = mapper.createObjectNode();
-        ObjectNode pag = mapper.createObjectNode();
-        JsonNode loans = mapper.valueToTree(pageLoan.getContent());;
-        pag.put("page", pageLoan.getNumber());
-        pag.put("size", pageLoan.getSize());
+        
+        String loans = pageLoan.getContent()
+                .stream()
+                .map(Loan::toString)
+                .collect(Collectors.joining(", ", "[", "]"));
+        JSONObject response = new JSONObject();
+        JSONObject pag = new JSONObject();
+        JSONArray lo = new JSONArray(loans);
         pag.put("total", pageLoan.getTotalPages());
-        response.put("items", loans);
+        pag.put("size", pageLoan.getSize());
+        pag.put("page", pageLoan.getNumber());
+        response.put("items", lo);
         response.put("paging", pag);
 
-        return response;
+        return response.toString();
     }
 }
