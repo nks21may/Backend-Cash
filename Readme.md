@@ -2,7 +2,7 @@
 
 Ejercicio de CashOnline.
 
-Fue creado utilizando como database Mysql 5.7.
+Fue creado utilizando como database Mysql 8.0.27
 
 ## Instalacion
 

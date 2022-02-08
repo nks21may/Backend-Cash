@@ -1,5 +1,6 @@
 package com.example.cash.Controllers;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,12 +46,17 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<String> createUser(
             @RequestBody User user) {
+        JSONObject response = new JSONObject();
         try {
             userRepository.save(user);
         } catch (Exception e) {
-            return new ResponseEntity<String>("User already exists", HttpStatus.CONFLICT);
+            response.put("message", "User already exists");
+            return new ResponseEntity<String>(response.toString(), HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<String>("User created", HttpStatus.CREATED);
+
+        response.put("loan_id", user.getId());
+        response.put("message", "User created");
+        return new ResponseEntity<String>(response.toString(), HttpStatus.CREATED);
     }
 
     @GetMapping("/users/{id}/loans")
@@ -71,6 +77,9 @@ public class UserController {
                 .orElseThrow(() -> new UserNotFoundException(id));
         loan.setUser(user);
         loanRepository.save(loan);
-        return new ResponseEntity<String>("Loan created", HttpStatus.CREATED);
+        JSONObject response = new JSONObject();
+        response.put("loan_id", loan.getId());
+        response.put("message", "Loan created");
+        return new ResponseEntity<String>(response.toString(), HttpStatus.CREATED);
     }
 }

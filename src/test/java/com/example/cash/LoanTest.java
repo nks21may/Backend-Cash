@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -62,15 +61,18 @@ public class LoanTest {
 					.contentType(MediaType.APPLICATION_JSON))
 					.andExpect(status().isCreated())
 					.andDo(x -> {
-						assertEquals(x.getResponse().getContentAsString(), "Loan created");
+						JSONObject response = new JSONObject(x.getResponse().getContentAsString());
+						assertEquals(response.get("message"), "Loan created");
+
 						List<Loan> loans = loanRepository.findAll();
+						Loan loan = loanRepository.getById((Integer) response.get("loan_id"));
 						assertEquals(loans.size(), prevLoans + 1);
+						assertEquals(1000, loan.getTotal().intValue());
 					});
-			return;
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			fail();
 		}
-		assertEquals(loanRepository.findAll().size(), 1);
 	}
 
 }

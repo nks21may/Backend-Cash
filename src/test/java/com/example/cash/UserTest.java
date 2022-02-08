@@ -47,7 +47,8 @@ public class UserTest {
 							.contentType(MediaType.APPLICATION_JSON))
 					.andExpect(status().isCreated())
 					.andDo(x -> {
-						assertEquals(x.getResponse().getContentAsString(), "User created");
+						JSONObject response = new JSONObject(x.getResponse().getContentAsString());
+						assertEquals(response.get("message"), "User created");
 						assertEquals(userRepository.findAll().size(), cantUsers + 1);
 					});
 		} catch (Exception e) {
