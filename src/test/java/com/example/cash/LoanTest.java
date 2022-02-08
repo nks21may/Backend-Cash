@@ -68,9 +68,6 @@ public class LoanTest {
 					});
 			return;
 		} catch (Exception e) {
-			System.out.println("++++++++++++++++++++++");
-			System.out.println(e.getMessage());
-			System.out.println(e.getCause());
 			fail();
 		}
 		assertEquals(loanRepository.findAll().size(), 1);
