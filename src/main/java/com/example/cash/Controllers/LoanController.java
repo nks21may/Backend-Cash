@@ -47,7 +47,7 @@ public class LoanController {
         JSONObject response = new JSONObject();
         JSONObject pag = new JSONObject();
         JSONArray lo = new JSONArray(loans);
-        pag.put("total", pageLoan.getTotalPages());
+        pag.put("total", pageLoan.getTotalElements());
         pag.put("size", pageLoan.getSize());
         pag.put("page", pageLoan.getNumber());
         response.put("items", lo);
