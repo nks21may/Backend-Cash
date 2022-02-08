@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
 
@@ -16,9 +18,16 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 public class User {
 
 	private @Id @GeneratedValue Integer id;
-	@Column(unique = true)
+	
+	@Column(unique = true, nullable = false)
+	@Email
+	@NotBlank
 	private String email;
+	
+	@NotBlank
 	private String firstname;
+	
+	@NotBlank
 	private String lastname;
 
 	@JsonRawValue

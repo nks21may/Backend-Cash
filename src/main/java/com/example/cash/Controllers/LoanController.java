@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LoanController {
+
     @Autowired
     LoanRepository loanRepository;
     @Autowired
@@ -29,6 +30,7 @@ public class LoanController {
             @RequestParam(required = false) Integer userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
+
         Page<Loan> pageLoan;
         PageRequest paging = PageRequest.of(page, size);
         if (userId != null) {
@@ -37,7 +39,7 @@ public class LoanController {
         } else {
             pageLoan = loanRepository.findAll(paging);
         }
-        
+
         String loans = pageLoan.getContent()
                 .stream()
                 .map(Loan::toString)

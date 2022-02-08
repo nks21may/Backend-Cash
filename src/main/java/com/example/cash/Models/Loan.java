@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 public class Loan {
 
     private @Id @GeneratedValue Integer id;
+    
     @Column(nullable = false)
     private BigDecimal total;
 
